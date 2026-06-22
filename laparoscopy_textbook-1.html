@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laparoscopic Surgery — A Physics-First Textbook</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f1923;
+    --paper: #f7f4ef;
+    --muted: #8a8070;
+    --rule: #d4cdc0;
+    --accent: #1a5c8a;       /* surgical blue */
+    --accent2: #2d8f6f;      /* insufflation green */
+    --accent3: #b04a2a;      /* warning/energy */
+    --highlight: #e8f3fb;
+    --highlight2: #eaf7f1;
+    --highlight3: #fdf1ec;
+    --white: #ffffff;
+    --sidebar-w: 260px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 16px;
+    line-height: 1.75;
+  }
+
+  /* ── SIDEBAR ─────────────────────────────── */
+  #sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: var(--sidebar-w);
+    height: 100vh;
+    background: var(--ink);
+    overflow-y: auto;
+    z-index: 100;
+    padding: 0 0 2rem;
+  }
+
+  #sidebar .brand {
+    padding: 1.5rem 1.4rem 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  #sidebar .brand .eyebrow {
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+  }
+
+  #sidebar .brand h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    color: #fff;
+    line-height: 1.3;
+  }
+
+  #sidebar nav { padding: 1rem 0; }
+
+  #sidebar nav .section-group { margin-bottom: 0.25rem; }
+
+  #sidebar nav .section-label {
+    display: block;
+    font-size: 0.58rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    padding: 0.8rem 1.4rem 0.3rem;
+    font-weight: 600;
+  }
+
+  #sidebar nav a {
+    display: block;
+    padding: 0.4rem 1.4rem 0.4rem 1.6rem;
+    color: rgba(255,255,255,0.65);
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 400;
+    border-left: 2px solid transparent;
+    transition: all 0.15s;
+    line-height: 1.4;
+  }
+
+  #sidebar nav a:hover,
+  #sidebar nav a.active {
+    color: #fff;
+    border-left-color: var(--accent2);
+    background: rgba(255,255,255,0.04);
+  }
+
+  /* ── MAIN ────────────────────────────────── */
+  #main {
+    margin-left: var(--sidebar-w);
+    min-height: 100vh;
+  }
+
+  /* ── HERO ────────────────────────────────── */
+  #hero {
+    background: var(--ink);
+    color: #fff;
+    padding: 5rem 5rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 420px; height: 420px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(26,92,138,0.35) 0%, transparent 70%);
+  }
+
+  #hero .eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    font-weight: 600;
+    margin-bottom: 1.2rem;
+  }
+
+  #hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 5vw, 3.6rem);
+    line-height: 1.15;
+    max-width: 720px;
+    margin-bottom: 1.2rem;
+  }
+
+  #hero h1 em {
+    font-style: italic;
+    color: rgba(255,255,255,0.55);
+  }
+
+  #hero .subtitle {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.5);
+    max-width: 560px;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+  }
+
+  #hero .meta {
+    display: flex;
+    gap: 2.5rem;
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 0.04em;
+  }
+
+  #hero .meta span strong {
+    display: block;
+    color: rgba(255,255,255,0.7);
+    font-size: 0.9rem;
+    margin-bottom: 0.1rem;
+  }
+
+  /* ── CONTENT AREA ────────────────────────── */
+  .content {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 3rem 4rem 5rem;
+  }
+
+  /* ── CHAPTER HEADERS ─────────────────────── */
+  .chapter {
+    margin-bottom: 5rem;
+  }
+
+  .chapter-header {
+    padding: 2.5rem 0 1.5rem;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 2.5rem;
+  }
+
+  .chapter-number {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 0.6rem;
+  }
+
+  .chapter-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    line-height: 1.2;
+    color: var(--ink);
+  }
+
+  .chapter-header .intro {
+    margin-top: 1rem;
+    font-size: 0.95rem;
+    color: var(--muted);
+    max-width: 600px;
+    line-height: 1.7;
+  }
+
+  /* ── SECTIONS ────────────────────────────── */
+  h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    margin: 2.2rem 0 0.9rem;
+    color: var(--ink);
+  }
+
+  h4 {
+    font-size: 0.88rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 1.8rem 0 0.6rem;
+  }
+
+  p { margin-bottom: 1rem; color: #2a2a2a; }
+
+  /* ── IMAGES ──────────────────────────────── */
+  .fig {
+    margin: 2rem 0;
+    background: #fff;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .fig img {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    display: block;
+    background: #e8e4de;
+  }
+
+  .fig.tall img { height: 380px; }
+  .fig.short img { height: 200px; }
+
+  .fig-caption {
+    padding: 0.8rem 1.2rem;
+    font-size: 0.78rem;
+    color: var(--muted);
+    border-top: 1px solid var(--rule);
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  .fig-caption strong {
+    font-style: normal;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  /* two-column image grid */
+  .fig-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 2rem 0;
+  }
+
+  .fig-grid .fig { margin: 0; }
+
+  /* ── PHYSICS BOXES ────────────────────────── */
+  .physics-box {
+    background: var(--highlight);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    padding: 1.4rem 1.5rem;
+    margin: 1.8rem 0;
+  }
+
+  .physics-box .box-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+
+  .physics-box h4 {
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 1rem;
+    color: var(--ink);
+    margin: 0 0 0.6rem;
+    font-family: 'Playfair Display', serif;
+  }
+
+  .physics-box p { font-size: 0.92rem; margin-bottom: 0.5rem; }
+
+  /* clinical relevance */
+  .clinical-box {
+    background: var(--highlight2);
+    border-left: 3px solid var(--accent2);
+    border-radius: 0 6px 6px 0;
+    padding: 1.4rem 1.5rem;
+    margin: 1.8rem 0;
+  }
+
+  .clinical-box .box-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--accent2);
+    margin-bottom: 0.5rem;
+  }
+
+  .clinical-box p { font-size: 0.92rem; margin-bottom: 0.5rem; }
+
+  /* warning box */
+  .warn-box {
+    background: var(--highlight3);
+    border-left: 3px solid var(--accent3);
+    border-radius: 0 6px 6px 0;
+    padding: 1.4rem 1.5rem;
+    margin: 1.8rem 0;
+  }
+
+  .warn-box .box-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--accent3);
+    margin-bottom: 0.5rem;
+  }
+
+  .warn-box p { font-size: 0.92rem; margin-bottom: 0.5rem; }
+
+  /* ── EQUATIONS ───────────────────────────── */
+  .equation-block {
+    background: var(--ink);
+    border-radius: 6px;
+    padding: 1.2rem 1.8rem;
+    margin: 1.4rem 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1rem;
+    color: #a8e6cf;
+    text-align: center;
+    letter-spacing: 0.02em;
+  }
+
+  .equation-block .eq-label {
+    display: block;
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    margin-bottom: 0.5rem;
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* ── TABLE ───────────────────────────────── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.8rem 0;
+    font-size: 0.88rem;
+  }
+
+  thead th {
+    background: var(--ink);
+    color: #fff;
+    padding: 0.65rem 1rem;
+    text-align: left;
+    font-weight: 500;
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+  }
+
+  tbody td {
+    padding: 0.6rem 1rem;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+    color: #2a2a2a;
+  }
+
+  tbody tr:nth-child(even) td { background: rgba(0,0,0,0.02); }
+
+  /* ── KEY POINTS ──────────────────────────── */
+  .key-points {
+    background: var(--ink);
+    color: #fff;
+    border-radius: 8px;
+    padding: 1.6rem 1.8rem;
+    margin: 2.5rem 0;
+  }
+
+  .key-points .kp-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+
+  .key-points ul {
+    list-style: none;
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .key-points ul li {
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.8);
+    padding-left: 1.2rem;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .key-points ul li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent2);
+  }
+
+  /* ── DIVIDER ─────────────────────────────── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--rule);
+    margin: 3rem 0;
+  }
+
+  /* ── INLINE HIGHLIGHT ────────────────────── */
+  .hl { background: rgba(26,92,138,0.1); padding: 0 3px; border-radius: 2px; }
+
+  /* ── RESPONSIVE ──────────────────────────── */
+  @media (max-width: 900px) {
+    #sidebar { width: 220px; }
+    #main { margin-left: 220px; }
+    .content { padding: 2rem 2rem 4rem; }
+    #hero { padding: 3rem 2rem 2.5rem; }
+    .fig-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 650px) {
+    #sidebar { display: none; }
+    #main { margin-left: 0; }
+  }
+
+  /* scrollbar */
+  #sidebar::-webkit-scrollbar { width: 4px; }
+  #sidebar::-webkit-scrollbar-track { background: transparent; }
+  #sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════ SIDEBAR -->
+<aside id="sidebar">
+  <div class="brand">
+    <div class="eyebrow">Surgical Education</div>
+    <h1>Laparoscopic Surgery<br>A Physics-First Textbook</h1>
+  </div>
+  <nav>
+    <div class="section-group">
+      <span class="section-label">Foundations</span>
+      <a href="#ch1">1. History & Evolution</a>
+      <a href="#ch2">2. Physics of Pneumoperitoneum</a>
+      <a href="#ch3">3. Optics & the Visual System</a>
+    </div>
+    <div class="section-group">
+      <span class="section-label">Technology</span>
+      <a href="#ch4">4. Instrumentation</a>
+      <a href="#ch5">5. Energy Devices</a>
+      <a href="#ch6">6. Haemodynamics & Physiology</a>
+    </div>
+    <div class="section-group">
+      <span class="section-label">Practice</span>
+      <a href="#ch7">7. Ergonomics & Psychomotor Skills</a>
+      <a href="#ch8">8. Complications: Physics of Failure</a>
+      <a href="#ch9">9. Advanced Platforms</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- ═══════════════════════════════════════════ MAIN -->
+<main id="main">
+
+<!-- HERO -->
+<section id="hero">
+  <div class="eyebrow">Institute of General Surgery · MMC / RGGGH</div>
+  <h1>Laparoscopic Surgery<br><em>A Physics-First Approach</em></h1>
+  <p class="subtitle">From gas laws to optics, from Ohm's law to ergonomics — understanding the science that underlies every instrument, port, and incision.</p>
+  <div class="meta">
+    <span><strong>9 Chapters</strong>Core Physics & Clinical</span>
+    <span><strong>Target Audience</strong>PG Surgical Residents</span>
+    <span><strong>Edition</strong>2026</span>
+  </div>
+</section>
+
+<div class="content">
+
+<!-- ═══════════════════════════════════ CHAPTER 1 -->
+<section class="chapter" id="ch1">
+  <div class="chapter-header">
+    <div class="chapter-number">Chapter 01</div>
+    <h2>History & Evolution of Minimally Invasive Surgery</h2>
+    <p class="intro">From primitive cystoscopes to robotic consoles — a century of iterative engineering, each breakthrough governed by a discrete physical principle.</p>
+  </div>
+
+  <h3>Origins: Light, Lenses, and Cavities</h3>
+  <p>The story of laparoscopy begins not in the operating theatre but in the physics laboratory. Philipp Bozzini's Lichtleiter (1806) used candlelight refracted through an angled mirror to illuminate body cavities — the first deliberate application of reflection optics in endoscopy. The instrument was rudimentary, but the principle (directing a photon beam through a narrow conduit and recovering reflected light) is identical to that of a modern 10 mm laparoscope.</p>
+
+  <div class="fig">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Laparoscopy_camera.jpg/1280px-Laparoscopy_camera.jpg" alt="Modern laparoscope camera system" onerror="this.src='https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=800&q=80'">
+    <div class="fig-caption"><strong>Fig 1.1</strong> — A modern 10 mm, 0° laparoscope with attached camera head. The rod-lens system inside transmits an inverted image from the objective lens to the eyepiece; digital sensors convert photons into the on-screen image. (Source: Wikimedia Commons)</div>
+  </div>
+
+  <p>Georg Kelling performed the first true peritoneoscopy in a dog in 1901, inflating the abdominal cavity with filtered air — the birth of pneumoperitoneum. Heinz Kalk systemised the technique in the 1920s–30s, developing a 135° viewing angle and a two-trocar approach. Hans Christian Jacobaeus used it in humans for diagnostic peritoneal inspection and to lyse tuberculous pleural adhesions.</p>
+
+  <h3>The Technological Watershed: CCD Camera (1986)</h3>
+  <p>Laparoscopy remained a diagnostic-only domain until 1986, when Kurt Semm performed the first laparoscopic appendicectomy and Philippe Mouret performed the first laparoscopic cholecystectomy in 1987. The enabling technology was not surgical skill but semiconductor physics — the charge-coupled device (CCD) camera, which could convert the optical image at the laparoscope eyepiece into an electronic signal displayed on a monitor, allowing the surgeon to operate in a two-handed manner without holding the scope.</p>
+
+  <div class="physics-box">
+    <div class="box-label">Physics Note</div>
+    <h4>The CCD — Photoelectric Conversion</h4>
+    <p>A CCD (charge-coupled device) array contains millions of photosensitive silicon pixels. Incident photons eject electrons via the photoelectric effect (E = hν). These charges accumulate proportionally to light intensity, are shifted along the chip row-by-row, converted to voltage, digitised, and rendered as pixels. Resolution is governed by pixel pitch and fill factor. Modern 4K chips achieve pixel pitches of ≈1.5 µm.</p>
+  </div>
+
+  <div class="fig-grid">
+    <div class="fig">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Laparoscopic_surgery_operating_room.jpg/1280px-Laparoscopic_surgery_operating_room.jpg" alt="Laparoscopic OR setup" onerror="this.src='https://images.unsplash.com/photo-1516549655169-df83a0774514?w=800&q=80'">
+      <div class="fig-caption"><strong>Fig 1.2</strong> — Modern laparoscopic operating suite. Monitor towers, insufflator, light source, and electrosurgery unit are standard equipment. Note the ergonomic monitor positioning at eye level.</div>
+    </div>
+    <div class="fig">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Surgical_robot_Da_Vinci_Si.jpg/1280px-Surgical_robot_Da_Vinci_Si.jpg" alt="Da Vinci surgical robot" onerror="this.src='https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=800&q=80'">
+      <div class="fig-caption"><strong>Fig 1.3</strong> — The da Vinci Si robotic platform, representing the current evolution of MIS. The surgeon console translates hand movements into filtered, tremor-free instrument motion.</div>
+    </div>
+  </div>
+
+  <div class="key-points">
+    <div class="kp-label">Key Points — Chapter 1</div>
+    <ul>
+      <li>Laparoscopy is fundamentally an optical-pneumatic discipline — physics precedes surgery.</li>
+      <li>The CCD camera (1986) was the single most transformative technology enabling operative laparoscopy.</li>
+      <li>Each decade's advance (HD, 3D, 4K, robotics) is a direct application of advances in semiconductor and optics physics.</li>
+      <li>Pneumoperitoneum — proposed by Kelling (1901) — remains the central physical substrate of laparoscopy in 2026.</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ═══════════════════════════════════ CHAPTER 2 -->
+<section class="chapter" id="ch2">
+  <div class="chapter-header">
+    <div class="chapter-number">Chapter 02</div>
+    <h2>Physics of Pneumoperitoneum</h2>
+    <p class="intro">Creating a working space inside the abdomen is entirely a gas physics problem. Boyle, Charles, and Poiseuille govern every phase of insufflation.</p>
+  </div>
+
+  <h3>Why Carbon Dioxide?</h3>
+  <p>CO₂ is the universal insufflation gas for laparoscopy. Its selection is not arbitrary — it is determined by a specific set of physical and physiological properties that make it uniquely safe.</p>
+
+  <table>
+    <thead>
+      <tr><th>Property</th><th>CO₂</th><th>Air</th><th>N₂O</th><th>He</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Blood solubility (Bunsen coeff.)</td><td><strong>0.83</strong></td><td>0.014</td><td>0.47</td><td>0.009</td></tr>
+      <tr><td>Supports combustion?</td><td>No</td><td>Yes</td><td>Yes</td><td>No</td></tr>
+      <tr><td>Risk of gas embolism</td><td>Very low</td><td>Fatal</td><td>Moderate</td><td>High</td></tr>
+      <tr><td>Readily exhaled via lungs?</td><td>Yes</td><td>Partial</td><td>Yes</td><td>No</td></tr>
+      <tr><td>Cost</td><td>Low</td><td>None</td><td>Moderate</td><td>High</td></tr>
+    </tbody>
+  </table>
+
+  <p>CO₂'s Bunsen coefficient of 0.83 means it dissolves in blood ~60× faster than nitrogen (air). Any inadvertent intravascular injection is rapidly absorbed and excreted through the lungs, making fatal gas embolism extremely rare compared to air or helium.</p>
+
+  <h3>Gas Laws Governing Insufflation</h3>
+
+  <h4>Boyle's Law</h4>
+  <div class="equation-block">
+    <span class="eq-label">Boyle's Law — Isothermal Process</span>
+    P₁V₁ = P₂V₂ &nbsp;(at constant temperature)
+  </div>
+  <p>When the insufflator delivers CO₂ from a cylinder (high pressure, small volume) into the abdominal cavity (increasing volume, falling pressure), Boyle's Law describes this expansion. The cylinder pressure drops as gas is consumed; the abdominal pressure rises until equilibrium or the set pressure limit (typically 12–15 mmHg) is reached.</p>
+
+  <h4>Charles's Law & Temperature Effects</h4>
+  <div class="equation-block">
+    <span class="eq-label">Charles's Law — Isobaric Process</span>
+    V/T = constant &nbsp;&nbsp;→&nbsp;&nbsp; V₁/T₁ = V₂/T₂
+  </div>
+  <p>CO₂ leaves the insufflator at room temperature (~20°C) but enters the peritoneal cavity at body temperature (37°C). This 17°C difference means the gas expands by a factor of (310/293) ≈ 1.058 — a 5.8% volume increase. This has two consequences: (1) insufflator flow readings slightly underestimate true intra-abdominal volume, and (2) cold dry gas strips moisture from peritoneal surfaces, causing <strong>peritoneal hypothermia and desiccation</strong> — a recognized cause of post-operative pain and adhesion formation. Heated, humidified insufflation systems (e.g., HumiGard) were developed precisely to counteract this Charles's Law effect.</p>
+
+  <div class="fig">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Laparoscopic_Surgery.jpg/1280px-Laparoscopic_Surgery.jpg" alt="Laparoscopic surgery in progress" onerror="this.src='https://images.unsplash.com/photo-1559757175-5700dde675bc?w=800&q=80'">
+    <div class="fig-caption"><strong>Fig 2.1</strong> — Pneumoperitoneum established. The abdominal wall is lifted off the viscera by CO₂ pressure, creating the working space. The insufflation tubing connects the CO₂ cylinder → pressure regulator → flow control valve → Veress needle or trocar.</div>
+  </div>
+
+  <h4>The Ideal Gas Law — Unifying All Three</h4>
+  <div class="equation-block">
+    <span class="eq-label">Ideal Gas Law</span>
+    PV = nRT
+    <br><span style="font-size:0.75rem; color:rgba(255,255,255,0.4); font-family:'Inter',sans-serif; margin-top:0.4rem; display:block">P = pressure (Pa) · V = volume (m³) · n = moles · R = 8.314 J/mol·K · T = temperature (K)</span>
+  </div>
+  <p>At intra-abdominal pressures of 12–15 mmHg (1600–2000 Pa above atmospheric), CO₂ behaves essentially as an ideal gas. The total volume of gas delivered to create a pneumoperitoneum in an average adult is approximately <strong>3–5 litres</strong> at a flow rate of 6–15 L/min. The insufflator continuously measures intra-abdominal pressure via the same port and adjusts flow to maintain the set pressure — it is a closed-loop pressure controller.</p>
+
+  <h3>Poiseuille's Law — Flow Through the Trocar</h3>
+  <div class="equation-block">
+    <span class="eq-label">Hagen-Poiseuille Equation (laminar flow)</span>
+    Q = (π·r⁴·ΔP) / (8·η·L)
+    <br><span style="font-size:0.75rem; color:rgba(255,255,255,0.4); font-family:'Inter',sans-serif; margin-top:0.4rem; display:block">Q = flow rate · r = radius · ΔP = pressure gradient · η = viscosity · L = length</span>
+  </div>
+  <p>This equation has profound practical implications. Flow rate is proportional to the <strong>fourth power of the radius</strong>. Doubling the internal diameter of a trocar increases gas flow 16-fold (2⁴ = 16). This explains why:</p>
+  <ul style="margin: 0.5rem 0 1rem 1.5rem; color: #2a2a2a; line-height:1.9;">
+    <li>5 mm trocars refill the peritoneum much more slowly than 10–12 mm trocars after gas loss.</li>
+    <li>The Veress needle (inner diameter ~1.2 mm) is not used for high-flow insufflation — an 8L/min flow rate creates dangerously high local pressures through such a narrow channel.</li>
+    <li>High-flow insufflators (up to 40 L/min) require large-bore insufflation tubing and 10–12 mm trocar access.</li>
+  </ul>
+
+  <div class="physics-box">
+    <div class="box-label">Physics Deep Dive</div>
+    <h4>Laminar vs Turbulent Flow — Reynolds Number</h4>
+    <p>At high flow rates through trocars, flow transitions from laminar to turbulent. The Reynolds number Re = (ρ·v·d)/η. For Re > 4000, flow is turbulent and Poiseuille's law no longer applies — resistance increases dramatically and the flow rate–pressure relationship becomes non-linear. High-flow insufflators producing >20 L/min through a 5 mm trocar will generate turbulent flow, causing pressure spikes and local tissue trauma at the insufflation site.</p>
+  </div>
+
+  <h3>Intra-Abdominal Pressure: The 15 mmHg Paradigm</h3>
+  <p>The standard target IAP of 12–15 mmHg represents a careful physiological compromise. Below 10 mmHg, the working space collapses during instrument manipulation (especially in the obese). Above 15 mmHg, the following pressure-dependent effects manifest:</p>
+
+  <div class="fig-grid">
+    <div class="fig">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Abdominal_cavity_labeled.jpg/800px-Abdominal_cavity_labeled.jpg" alt="Abdominal cavity anatomy" onerror="this.src='https://images.unsplash.com/photo-1530026405186-ed1f139313f8?w=800&q=80'">
+      <div class="fig-caption"><strong>Fig 2.2</strong> — The peritoneal cavity is a virtual space in the deflated state. CO₂ at 12–15 mmHg expands it to ~4–6L of working volume.</div>
+    </div>
+    <div class="fig">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Veress_needle.jpg/640px-Veress_needle.jpg" alt="Veress needle" onerror="this.src='https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?w=800&q=80'">
+      <div class="fig-caption"><strong>Fig 2.3</strong> — The Veress needle (modified by Janos Veress, 1938). The spring-loaded blunt inner stylet advances past the sharp outer needle once peritoneal resistance is overcome, protecting viscera.</div>
+    </div>
+  </div>
+
+  <div class="warn-box">
+    <div class="box-label">Clinical Warning — High IAP Effects</div>
+    <p><strong>>15 mmHg:</strong> Inferior vena cava compression → reduced venous return → ↓ cardiac output (by up to 50% at 40 mmHg)</p>
+    <p><strong>>15 mmHg:</strong> Diaphragm elevation → reduced FRC → V/Q mismatch → hypoxia</p>
+    <p><strong>>15 mmHg:</strong> Renal vein compression → reduced GFR → oliguria (resolves on deflation)</p>
+    <p><strong>>20 mmHg:</strong> Intracranial pressure rises via transmitted pneumoperitoneum through diaphragmatic hiata — relevant in prone/Trendelenburg position.</p>
+  </div>
+
+  <div class="key-points">
+    <div class="kp-label">Key Points — Chapter 2</div>
+    <ul>
+      <li>CO₂ is chosen because its high blood solubility (Bunsen 0.83) makes gas embolism self-limiting.</li>
+      <li>Boyle's Law explains cylinder depletion; Charles's Law explains why cold gas causes peritoneal injury.</li>
+      <li>Poiseuille's Law: flow ∝ r⁴ — trocar diameter is the dominant determinant of insufflation speed.</li>
+      <li>Target IAP 12–15 mmHg balances working space against haemodynamic compromise.</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ═══════════════════════════════════ CHAPTER 3 -->
+<section class="chapter" id="ch3">
+  <div class="chapter-header">
+    <div class="chapter-number">Chapter 03</div>
+    <h2>Optics & the Visual System</h2>
+    <p class="intro">The laparoscope is a precision optical instrument. Understanding its physics explains every artefact, resolution limit, and depth-perception failure the surgeon encounters.</p>
+  </div>
+
+  <h3>The Rod-Lens System (Hopkins, 1954)</h3>
+  <p>Harold Hopkins revolutionised endoscope design by replacing air-spaced lenses with glass rods separated by air gaps — inverting the traditional telescope's optical architecture. In the Hopkins system, glass is the medium and air is the lens. This dramatically increases light transmission (by ~80× compared to conventional lens systems) because glass has a higher refractive index (n ≈ 1.5) than air (n = 1.0), maximising the numerical aperture of the system.</p>
+
+  <div class="equation-block">
+    <span class="eq-label">Snell's Law — Refraction at Each Interface</span>
+    n₁·sin(θ₁) = n₂·sin(θ₂)
+    <br><span style="font-size:0.75rem; color:rgba(255,255,255,0.4); font-family:'Inter',sans-serif; margin-top:0.4rem; display:block">n = refractive index · θ = angle to normal at interface</span>
+  </div>
+
+  <div class="fig tall">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Laparoscope.jpg/800px-Laparoscope.jpg" alt="Laparoscope cross section rod lens" onerror="this.src='https://images.unsplash.com/photo-1576086213369-97a306d36557?w=800&q=80'">
+    <div class="fig-caption"><strong>Fig 3.1</strong> — Cross-section of a 10 mm Hopkins rod-lens laparoscope. Light travels the length of the instrument through alternating glass rods and air-lens spaces. The outer sheath carries the fibreoptic light bundle. The separate light and imaging channels prevent thermal damage to the image.</div>
+  </div>
+
+  <h3>Viewing Angles: 0°, 30°, 45°, 70°</h3>
+  <p>The angle of the objective lens relative to the laparoscope's long axis determines the viewing direction. A 0° (straight-forward) scope is the simplest: the optical axis of the objective coincides with the laparoscope shaft. A 30° scope achieves an off-axis view by tilting the objective prism 30° relative to the shaft — rotating the scope around its long axis then changes the viewing direction through a full 360° cone.</p>
+
+  <div class="physics-box">
+    <div class="box-label">Physics Note — Angled Scopes</div>
+    <h4>Why 30° Scopes Require Mental Rotation</h4>
+    <p>With a 30° scope, the field of view moves in the opposite direction to the natural expectation when the scope is rotated. This is because the surgeon is looking through a prism that deflects the optical path. The brain must build a mental model of prism geometry to interpret movement correctly — a significant contributor to the training curve for 30° scope use. Simulators are particularly effective for this skill because they can visually de-couple scope rotation from image movement during learning.</p>
+  </div>
+
+  <h3>Resolution, Depth of Field, and Magnification</h3>
+
+  <h4>Optical Resolution</h4>
+  <div class="equation-block">
+    <span class="eq-label">Rayleigh Criterion — Minimum Resolvable Distance</span>
+    d_min = 0.61·λ / NA
+    <br><span style="font-size:0.75rem; color:rgba(255,255,255,0.4); font-family:'Inter',sans-serif; margin-top:0.4rem; display:block">λ = wavelength of light · NA = numerical aperture of objective</span>
+  </div>
+  <p>For visible light (λ ≈ 550 nm) and a typical laparoscope NA of 0.05, the theoretical minimum resolvable distance is ~6.7 µm. In practice, the limiting factor is the camera chip pixel size and the monitor resolution, not the optics.</p>
+
+  <h4>Magnification</h4>
+  <p>Laparoscopic magnification depends on the distance from scope tip to tissue. At 1 cm from the objective, magnification can reach 10–20×; at 5 cm, it falls to 4–6×. This variable magnification has critical surgical implications — vessels that appear large close-up may be entirely out of the field at working distance. Surgeons must habitually maintain a calibrated working distance.</p>
+
+  <h4>Depth of Field</h4>
+  <div class="equation-block">
+    <span class="eq-label">Depth of Field (simplified)</span>
+    DOF ≈ 2·f²·n·c / (d·F)
+    <br><span style="font-size:0.75rem; color:rgba(255,255,255,0.4); font-family:'Inter',sans-serif; margin-top:0.4rem; display:block">f = focal length · n = refractive index · c = circle of confusion · d = object distance · F = f-number</span>
+  </div>
+  <p>Laparoscopes have a large depth of field (typically 5 mm to 10 cm) achieved by using a small aperture (high f-number). This means most of the working space is in focus simultaneously — advantageous for surgery but it eliminates the selective depth-blurring that assists depth perception in human binocular vision.</p>
+
+  <h3>The Depth Perception Problem</h3>
+  <p>Normal human depth perception relies on three primary cues:</p>
+  <ul style="margin: 0.5rem 0 1rem 1.5rem; line-height:2; color:#2a2a2a;">
+    <li><strong>Binocular disparity</strong> — the slightly different images received by each eye allow stereoscopic computation of distance.</li>
+    <li><strong>Motion parallax</strong> — objects at different distances move differently as the head moves.</li>
+    <li><strong>Monocular cues</strong> — perspective, occlusion, texture gradient, and shading.</li>
+  </ul>
+  <p>Standard 2D laparoscopy eliminates binocular disparity entirely (single optical path, single monitor). Surgeons compensate by relying heavily on instrument tip movement (a form of motion parallax) and tissue deformation to infer depth — a learned skill that takes 50–100+ cases to develop reliably.</p>
+
+  <div class="fig-grid">
+    <div class="fig">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/3D_laparoscope.jpg/640px-3D_laparoscope.jpg" alt="3D laparoscope system" onerror="this.src='https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=800&q=80'">
+      <div class="fig-caption"><strong>Fig 3.2</strong> — A 3D laparoscope contains two offset optical paths feeding left and right camera channels, recreating binocular disparity. Circular polarising filters on the display and passive glasses separate the channels at the surgeon's eyes.</div>
+    </div>
+    <div class="fig">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Laparoscope_with_camera.jpg/640px-Laparoscope_with_camera.jpg" alt="Laparoscope camera head" onerror="this.src='https://images.unsplash.com/photo-1504439468489-c8920d796a29?w=800&q=80'">
+      <div class="fig-caption"><strong>Fig 3.3</strong> — Camera head with white balance and focus controls. The camera processes raw sensor output through an image signal processor (ISP) to apply colour correction, noise reduction, and sharpening before display output.</div>
+    </div>
+  </div>
+
+  <h3>Light Sources: Physics of Illumination</h3>
+  <p>Three generations of light sources have been used in laparoscopy, each governed by different emission physics:</p>
+
+  <table>
+    <thead>
+      <tr><th>Source</th><th>Physics</th><th>Colour Temp (K)</th><th>CRI</th><th>Issue</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Halogen</td><td>Blackbody radiation (tungsten filament)</td><td>3200</td><td>100</td><td>High IR heat; short lamp life</td></tr>
+      <tr><td>Xenon Arc</td><td>Plasma arc in xenon gas</td><td>5500–6500</td><td>94</td><td>Explosion risk; UV output</td></tr>
+      <tr><td>LED</td><td>Electroluminescence (p-n junction)</td><td>5000–7000</td><td>85–95</td><td>Blue peak; limited IR</td></tr>
+      <tr><td>Laser (NBI)</td><td>Stimulated emission</td><td>N/A</td><td>N/A</td><td>Narrow-band; not white light</td></tr>
+    </tbody>
+  </table>
+
+  <p>Modern LED light sources (introduced ~2010) produce white light through two mechanisms: a blue LED with a phosphor conversion layer (most common), or RGB LED arrays. They have essentially infinite lamp life (>50,000 hours vs 500 hours for xenon) and no explosion or UV hazard, but their spectral output differs from the solar spectrum, requiring careful camera white-balancing to render tissue colour accurately.</p>
+
+  <h3>Fibreoptic Light Cables — Total Internal Reflection</h3>
+  <div class="equation-block">
+    <span class="eq-label">Critical Angle for Total Internal Reflection</span>
+    θ_c = arcsin(n₂/n₁)
+    <br><span style="font-size:0.75rem; color:rgba(255,255,255,0.4); font-family:'Inter',sans-serif; margin-top:0.4rem; display:block">n₁ = core refractive index · n₂ = cladding refractive index · θ_c = critical angle</span>
+  </div>
+  <p>Light cable fibres (silica glass, n₁ ≈ 1.46) are clad in a lower-index glass (n₂ ≈ 1.40). Any ray striking the core-cladding interface at an angle greater than the critical angle (~73°) undergoes total internal reflection and propagates the entire length without loss. Each laparoscope light cable contains 8,000–15,000 individual fibres. Broken fibres appear as black dots in the image — a bundle can tolerate up to 30% fibre breakage before clinically significant darkening. Cables must never be sharply bent or kinked, as this causes fibre fracture.</p>
+
+  <div class="clinical-box">
+    <div class="box-label">Clinical Relevance</div>
+    <p><strong>White Balance:</strong> Always white-balance the camera before each case with the scope tip held against a white gauze in the peritoneal cavity (not outside, where ambient light conditions differ). Incorrect white balance causes colour rendering errors that can obscure bile, blood, or ischaemia.</p>
+    <p><strong>Lens Fogging:</strong> The scope tip entering a warm peritoneal cavity from a cooler environment causes water vapour condensation on the objective lens (dew point physics). Anti-fogging solutions (surfactant-based, or warming the scope tip in warm saline prior to insertion) are essential.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ═══════════════════════════════════ CHAPTER 4 -->
+<section class="chapter" id="ch4">
+  <div class="chapter-header">
+    <div class="chapter-number">Chapter 04</div>
+    <h2>Instrumentation</h2>
+    <p class="intro">Trocars, graspers, needle drivers, clip appliers — each instrument's design is a mechanical engineering solution to the constraints imposed by working through a 5–12 mm hole.</p>
+  </div>
+
+  <h3>Trocars: Design Physics</h3>
+  <p>The trocar serves two functions: (1) pierce the abdominal wall atraumatically, and (2) maintain a gas-tight seal around instruments of varying diameters. The geometry of the trocar tip determines the force required for insertion and the tissue damage caused.</p>
+
+  <div class="physics-box">
+    <div class="box-label">Physics — Pressure and Trocar Insertion</div>
+    <h4>Force, Pressure, and Tissue Penetration</h4>
+    <p>Pressure = Force / Area. A sharp pyramidal trocar tip concentrates the insertion force over a tiny contact area, creating very high local pressure that overcomes fascial tensile strength with minimal total force. A conical dilating trocar spreads the force over a larger area — it separates rather than cuts fascial fibres, reducing bleeding and potentially allowing fascial defect closure without sutures for 12 mm ports.</p>
+  </div>
+
+  <div class="fig">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Trocar.jpg/800px-Trocar.jpg" alt="Laparoscopic trocars various sizes" onerror="this.src='https://images.unsplash.com/photo-1603398938378-e54eab446dde?w=800&q=80'">
+    <div class="fig-caption"><strong>Fig 4.1</strong> — Trocar types: (A) Pyramidal bladed — cuts fascia, maximum force concentration; (B) Conical dilating — separates fibres, less haemorrhage; (C) Visual entry (Optiview type) — transparent tip allows real-time visualisation of tissue layers during insertion.</div>
+  </div>
+
+  <h3>The Fulcrum Effect — Instrument Mechanics</h3>
+  <p>Every laparoscopic instrument operates as a Class 1 lever with the trocar entry point as the fulcrum. This creates the <strong>fulcrum effect</strong> (also called the mirror effect): moving the handle to the right moves the instrument tip to the left, and vice versa. This spatial inversion is absent in open surgery and is one of the primary psychomotor challenges of laparoscopy.</p>
+
+  <div class="equation-block">
+    <span class="eq-label">Lever Mechanics — Mechanical Disadvantage</span>
+    F_tissue × d_tip = F_hand × d_handle
+    <br><span style="font-size:0.75rem; color:rgba(255,255,255,0.4); font-family:'Inter',sans-serif; margin-top:0.4rem; display:block">d_tip = distance from fulcrum to tip · d_handle = distance from fulcrum to handle</span>
+  </div>
+
+  <p>If the handle is 15 cm from the fulcrum and the tip is 20 cm beyond, a 10 N force at the tip requires (20/15) × 10 = 13.3 N at the handle. However, the same ratio means tissue feedback forces are <strong>attenuated</strong> — the surgeon feels only 75% of the actual tissue resistance. This "mechanical disadvantage" in haptic feedback is an intrinsic limitation of all rigid laparoscopic instruments.</p>
+
+  <h3>Degrees of Freedom Comparison</h3>
+  <table>
+    <thead>
+      <tr><th>Platform</th><th>Degrees of Freedom</th><th>Wrist Articulation</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Human hand (open surgery)</td><td>7</td><td>Full</td></tr>
+      <tr><td>Straight laparoscopic instrument</td><td>4</td><td>None</td></tr>
+      <tr><td>Articulating laparoscopic instrument</td><td>6</td><td>Partial (1–2 planes)</td></tr>
+      <tr><td>da Vinci wristed instrument</td><td>7</td><td>Full (EndoWrist)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="fig-grid">
+    <div class="fig">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Laparoscopic_instruments.jpg/800px-Laparoscopic_instruments.jpg" alt="Laparoscopic instrument set" onerror="this.src='https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=800&q=80'">
+      <div class="fig-caption"><strong>Fig 4.2</strong> — Standard laparoscopic instrument set: Maryland dissector, scissors, grasping forceps, clip applier, needle driver, and suction-irrigation. Note the identical 5 mm shaft diameter enabling interchangeability.</div>
+    </div>
+    <div class="fig">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Laparoscopy_robot_1.jpg/800px-Laparoscopy_robot_1.jpg" alt="Robotic instrument wristed" onerror="this.src='https://images.unsplash.com/photo-1530497610245-94d3c16cda28?w=800&q=80'">
+      <div class="fig-caption"><strong>Fig 4.3</strong> — Robotic (da Vinci) EndoWrist instrument tip showing 7-DoF articulation. The cable-and-pulley drive system translates the console surgeon's wrist rotation into tip articulation inside the patient.</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ═══════════════════════════════════ CHAPTER 5 -->
+<section class="chapter" id="ch5">
+  <div class="chapter-header">
+    <div class="chapter-number">Chapter 05</div>
+    <h2>Energy Devices: Electrosurgery & Ultrasonic</h2>
+    <p class="intro">Every energy device in the laparoscopic field is a controlled delivery of physical energy — electrical, thermal, or mechanical — to achieve haemostasis or cutting. Understanding the physics prevents misuse.</p>
+  </div>
+
+  <h3>Electrosurgery — Fundamentals</h3>
+  <p>Electrosurgery exploits Joule heating — the conversion of electrical energy to thermal energy when current passes through biological tissue (a resistive medium).</p>
+
+  <div class="equation-block">
+    <span class="eq-label">Joule's Law of Electrical Heating</span>
+    P = I² · R = V² / R = V · I
+    <br><span style="font-size:0.75rem; color:rgba(255,255,255,0.4); font-family:'Inter',sans-serif; margin-top:0.4rem; display:block">P = power (W) · I = current (A) · R = tissue resistance (Ω) · V = voltage (V)</span>
+  </div>
+
+  <p>The key insight is that power dissipation (heat) is proportional to the <strong>square</strong> of current density. A small contact area concentrates current → high current density → more heat per unit tissue volume. This is why a fine needle electrode cuts precisely, while a large dispersive pad (large area → low current density) is harmless.</p>
+
+  <h3>Monopolar vs Bipolar</h3>
+
+  <div class="fig">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Electrosurgical_unit.jpg/800px-Electrosurgical_unit.jpg" alt="Electrosurgical unit generator" onerror="this.src='https://images.unsplash.com/photo-1612277795421-9bc7706a4a34?w=800&q=80'">
+    <div class="fig-caption"><strong>Fig 5.1</strong> — A modern electrosurgical unit (ESU/diathermy machine). Output power is typically 50–400W. The ESU generates alternating current at radio frequencies (300 kHz–3 MHz) to avoid Faradic neuromuscular stimulation while achieving resistive heating.</div>
+  </div>
+
+  <table>
+    <thead>
+      <tr><th>Parameter</th><th>Monopolar</th><th>Bipolar</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Circuit</td><td>Active electrode → through patient → dispersive pad</td><td>Between both jaws of instrument only</td></tr>
+      <tr><td>Current path length</td><td>Entire body</td><td>1–3 mm between jaws</td></tr>
+      <tr><td>Lateral thermal spread</td><td>Up to 2–3 cm from active electrode</td><td>1–2 mm</td></tr>
+      <tr><td>Stray current risk</td><td>Yes — capacitive coupling, insulation failure</td><td>Minimal</td></tr>
+      <tr><td>Cutting ability</td><td>Excellent</td><td>Poor (requires scissors)</td></tr>
+    </tbody>
+  </table>
+
+  <h4>Frequency: Why RF?</h4>
+  <p>Household current (50 Hz AC) causes neuromuscular Faradic stimulation at currents as low as 1 mA (100 mA is lethal via ventricular fibrillation). Electrosurgery operates at 300 kHz–3 MHz — frequencies at which ionic current oscillation is too fast for voltage-gated sodium channels to respond, preventing nerve or muscle stimulation. The thermal effect persists because Joule heating is frequency-independent.</p>
+
+  <h3>Waveforms: Cut vs Coagulate</h3>
+  <div class="physics-box">
+    <div class="box-label">Physics — Waveform Physics</div>
+    <h4>Continuous vs Interrupted (Duty Cycle)</h4>
+    <p><strong>Cut mode:</strong> Continuous unmodulated sinusoidal waveform. High duty cycle (100%) → rapid, sustained heating → intracellular water flash-vaporises → cell explosion → tissue cutting. Relatively low peak voltage (~200V peak-to-peak).</p>
+    <p><strong>Coagulate mode:</strong> Heavily modulated (interrupted) waveform. Low duty cycle (~6%) → lower average power → slower heating → protein denaturation without vaporisation → char and coagulum formation. High peak voltage (~2000V) required to maintain arc across coagulum.</p>
+    <p><strong>Blend modes:</strong> Intermediate duty cycles (20–80%) provide graded mix of cutting and haemostasis.</p>
+  </div>
+
+  <h3>Capacitive Coupling — A Hidden Physics Danger</h3>
+  <div class="equation-block">
+    <span class="eq-label">Capacitive Reactance</span>
+    X_C = 1 / (2π·f·C)
+    <br><span style="font-size:0.75rem; color:rgba(255,255,255,0.4); font-family:'Inter',sans-serif; margin-top:0.4rem; display:block">X_C = impedance to AC current · f = frequency · C = capacitance (determined by geometry)</span>
+  </div>
+  <p>Any two conductors separated by an insulator form a capacitor. The metal shaft of a monopolar instrument, separated from the trocar metal by the insulation sheath, forms a capacitor. At high RF frequencies (X_C is low), significant current can flow through this capacitor to the trocar and from there to adjacent bowel or vessels — causing <em>invisible burns</em> outside the surgeon's field of view. This is capacitive coupling injury, a specific risk of monopolar electrosurgery in laparoscopy. It is mitigated by:</p>
+  <ul style="margin: 0.5rem 0 1rem 1.5rem; line-height:1.9; color:#2a2a2a;">
+    <li>Using all-metal or all-plastic trocar systems (not hybrid)</li>
+    <li>Active electrode monitoring (AEM) systems that detect stray current</li>
+    <li>Limiting activation time and power settings</li>
+    <li>Preferring bipolar energy when near critical structures</li>
+  </ul>
+
+  <h3>Ultrasonic Energy Devices</h3>
+  <p>Devices such as the Harmonic scalpel (Ethicon) and SonoSurg (Olympus) use entirely different physics — <strong>mechanical vibration</strong> rather than electrical current.</p>
+
+  <div class="equation-block">
+    <span class="eq-label">Resonant Frequency of Piezoelectric Transducer</span>
+    f = v / (2·L)
+    <br><span style="font-size:0.75rem; color:rgba(255,255,255,0.4); font-family:'Inter',sans-serif; margin-top:0.4rem; display:block">f = resonant frequency · v = speed of sound in titanium · L = blade length</span>
+  </div>
+
+  <p>Piezoelectric crystals in the handpiece convert electrical energy into longitudinal mechanical oscillations at 23,500 or 55,500 Hz. These vibrations are transmitted to a titanium blade that oscillates at an amplitude of 25–100 µm. When tissue is clamped against the blade:</p>
+  <ul style="margin: 0.5rem 0 1rem 1.5rem; line-height:1.9; color:#2a2a2a;">
+    <li><strong>Frictional heating</strong> denatures protein and seals vessels (coaptive coagulation).</li>
+    <li><strong>Cavitation</strong> — rapid vibration creates momentary vacuum bubbles in tissue fluid that collapse violently, rupturing cell membranes (cutting effect).</li>
+    <li>Maximum tissue temperature reaches only <strong>80–100°C</strong> (vs 200–300°C with electrosurgery), reducing lateral thermal spread to <1 mm.</li>
+    <li>No electrical current passes through the patient — eliminates capacitive coupling, neuromuscular stimulation risk, and pacemaker interference.</li>
+  </ul>
+
+  <div class="clinical-box">
+    <div class="box-label">Clinical Relevance — Energy Device Selection</div>
+    <p>Near the bile duct, ureter, or recurrent laryngeal nerve: use clip ligation or bipolar forceps. Ultrasonic devices (1 mm lateral spread) are preferable to monopolar (2–3 cm). Vessel-sealing systems (LigaSure, EnSeal) use tissue impedance feedback to deliver precisely calibrated bipolar energy — safe for vessels up to 7 mm in diameter.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ═══════════════════════════════════ CHAPTER 6 -->
+<section class="chapter" id="ch6">
+  <div class="chapter-header">
+    <div class="chapter-number">Chapter 06</div>
+    <h2>Haemodynamics & Physiology of Pneumoperitoneum</h2>
+    <p class="intro">Raising intra-abdominal pressure to 15 mmHg initiates a cascade of mechanical and neurohormonal changes. The physics of pressure transmission governs every effect.</div>
+  </div>
+
+  <h3>Cardiovascular Physics</h3>
+  <p>The intra-abdominal veins (IVC, portal vein, mesenteric veins) are thin-walled, low-pressure vessels. Unlike arteries, they have little smooth muscle and cannot autoregulate against external compression. At IAP of 12–15 mmHg, the IVC is partially compressed, reducing its cross-sectional area.</p>
+
+  <div class="equation-block">
+    <span class="eq-label">Venous Return — Guyton's Mean Systemic Filling Pressure Model</span>
+    VR = (MSFP − RAP) / RVR
+    <br><span style="font-size:0.75rem; color:rgba(255,255,255,0.4); font-family:'Inter',sans-serif; margin-top:0.4rem; display:block">VR = venous return · MSFP = mean systemic filling pressure · RAP = right atrial pressure · RVR = resistance to venous return</span>
+  </div>
+
+  <p>IAP elevation increases RVR by compressing abdominal veins → reduced venous return → reduced right ventricular preload → reduced cardiac output (Frank-Starling mechanism). Simultaneously, the Trendelenburg position (head-down) used in pelvic laparoscopy partially compensates by gravitationally increasing venous return from the lower limbs. Reverse Trendelenburg (head-up) used in upper abdominal surgery (cholecystectomy) exacerbates the fall in venous return.</p>
+
+  <div class="fig">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Thoracic_and_abdominal_cavity_labeled.jpg/800px-Thoracic_and_abdominal_cavity_labeled.jpg" alt="Abdominal and thoracic anatomy pressure transmission" onerror="this.src='https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&q=80'">
+    <div class="fig-caption"><strong>Fig 6.1</strong> — Pressure transmission from peritoneal cavity to adjacent compartments. IAP of 15 mmHg is transmitted through the diaphragm (elevating it 3–5 cm), raising intrathoracic pressure, compressing the IVC, and transmitting pressure retrograde to the intracranial compartment via epidural veins.</div>
+  </div>
+
+  <h3>Pulmonary Mechanics Under Pneumoperitoneum</h3>
+
+  <table>
+    <thead>
+      <tr><th>Parameter</th><th>Effect at IAP 15 mmHg</th><th>Mechanism</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Diaphragm position</td><td>Elevated 3–5 cm</td><td>Direct upward pressure</td></tr>
+      <tr><td>FRC</td><td>↓ 20–30%</td><td>Reduced chest wall compliance</td></tr>
+      <tr><td>Peak airway pressure</td><td>↑ 20–40%</td><td>Reduced lung compliance</td></tr>
+      <tr><td>PaCO₂</td><td>↑ (absorbed CO₂)</td><td>CO₂ absorption from peritoneum</td></tr>
+      <tr><td>Ventilation requirement</td><td>↑ 15–30%</td><td>To excrete absorbed CO₂</td></tr>
+      <tr><td>V/Q mismatch</td><td>Increased (atelectasis)</td><td>Dependent zone compression</td></tr>
+    </tbody>
+  </table>
+
+  <div class="warn-box">
+    <div class="box-label">High-Risk Scenarios</div>
+    <p><strong>COPD patients:</strong> Limited CO₂ excretion reserve — absorbed peritoneal CO₂ may cause uncompensated respiratory acidosis. Lower IAP (8–10 mmHg) + low-flow technique recommended.</p>
+    <p><strong>Known IHD/CCF:</strong> Cardiac output reduction at IAP >15 mmHg may precipitate ischaemia. Consider invasive haemodynamic monitoring, optimal preload before insufflation.</p>
+    <p><strong>Raised ICP:</strong> Pneumoperitoneum + Trendelenburg position raises ICP via transmitted pressure + impaired cerebral venous drainage. Minimise IAP and head-down tilt; avoid in severe TBI.</p>
+  </div>
+
+  <h3>The Neuroendocrine Response</h3>
+  <p>Beyond the direct mechanical effects, pneumoperitoneum triggers a neuroendocrine stress response. Peritoneal mechanoreceptors sense the stretch from distension, activating the sympathoadrenal axis. Plasma catecholamines, ADH, renin, and aldosterone all rise — contributing to the sodium and water retention seen post-laparoscopically. CO₂ absorption causes hypercarbia, which is itself a potent sympathetic stimulus, raising heart rate and mean arterial pressure. These effects peak at 20–30 minutes of pneumoperitoneum and resolve within minutes of deflation.</p>
+</section>
+
+<hr class="divider">
+
+<!-- ═══════════════════════════════════ CHAPTER 7 -->
+<section class="chapter" id="ch7">
+  <div class="chapter-header">
+    <div class="chapter-number">Chapter 07</div>
+    <h2>Ergonomics & Psychomotor Skills</h2>
+    <p class="intro">Laparoscopic surgery imposes unique physical and perceptual demands. Ergonomic failure leads to surgeon injury; skill failure leads to patient injury.</p>
+  </div>
+
+  <h3>Monitor Positioning — Visual Ergonomics</h3>
+  <p>The monitor must be placed such that the surgeon's cervical spine is in a neutral or slightly flexed position (gaze angle of 15–25° below horizontal). Monitor height should align the centre of the screen with the surgeon's eye level. Horizontal distance is typically 150–200 cm (3–5 screen heights) for optimal resolution perception.</p>
+
+  <div class="physics-box">
+    <div class="box-label">Physics — Resolution and Viewing Distance</div>
+    <h4>Angular Resolution and Screen Pixel Density</h4>
+    <p>The human eye's angular resolution is approximately 1 arc minute (1/60°). At a viewing distance of 150 cm, this corresponds to a minimum perceivable feature size of ~0.44 mm. A 4K monitor (3840×2160 pixels) on a 32-inch screen has a pixel pitch of ~0.18 mm — well below the resolution limit. At 150 cm viewing distance, 4K and HD are indistinguishable to the human eye. The primary benefit of 4K is the ability to <em>zoom</em> into regions of interest without pixelation — relevant for structured reporting and telesurgery.</p>
+  </div>
+
+  <h3>Trocar Placement Geometry — The Isosceles Triangle Principle</h3>
+  <p>Optimal port placement follows a geometric rule: the camera port and two working ports should form an equilateral or isosceles triangle, with the target organ at the apex opposite the camera. This ensures:</p>
+  <ul style="margin: 0.5rem 0 1rem 1.5rem; line-height:1.9; color:#2a2a2a;">
+    <li>Instruments approach the target in convergent lines — avoiding the "sword-fighting" configuration where instruments cross.</li>
+    <li>Each working instrument is ~60° from the camera axis — maximising triangulation and depth perception.</li>
+    <li>The camera "looks" at the target from an appropriate distance (15–30 cm) for optimal focus and magnification.</li>
+  </ul>
+
+  <h3>Surgeon Musculoskeletal Injury — Force Mechanics</h3>
+  <p>Studies show 87% of laparoscopic surgeons experience work-related musculoskeletal symptoms. The primary mechanisms are:</p>
+
+  <table>
+    <thead>
+      <tr><th>Body Region</th><th>Mechanism</th><th>Prevention</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Cervical spine</td><td>Extreme lateral flexion/rotation to suboptimal monitor</td><td>Direct monitor positioning</td></tr>
+      <tr><td>Shoulder/upper limb</td><td>Sustained abduction >30°; ulnar deviation at wrist</td><td>Table height adjustment; instrument handle redesign</td></tr>
+      <tr><td>Lower back</td><td>Prolonged standing with trunk flexion</td><td>Anti-fatigue mats; sit-stand stools</td></tr>
+      <tr><td>Thumb (de Quervain)</td><td>Repetitive scissor-grip on ring-handle instruments</td><td>Ergonomic handles; robotic platforms</td></tr>
+    </tbody>
+  </table>
+
+  <div class="clinical-box">
+    <div class="box-label">Practical — Table Height Setting</div>
+    <p>Optimal operating table height = elbow height − 10 to 15 cm. This allows the surgeon's elbows to rest at ~90°, minimising shoulder abduction and forearm pronation. Verify before each case: table height cannot be corrected mid-procedure without significant re-setup time.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ═══════════════════════════════════ CHAPTER 8 -->
+<section class="chapter" id="ch8">
+  <div class="chapter-header">
+    <div class="chapter-number">Chapter 08</div>
+    <h2>Complications: The Physics of Failure</h2>
+    <p class="intro">Each major laparoscopic complication has a discrete physical mechanism. Understanding the physics allows prevention and early recognition.</p>
+  </div>
+
+  <h3>Gas Embolism</h3>
+  <p>Inadvertent insufflation of CO₂ into a blood vessel (most commonly the inferior epigastric vein or a hepatic vein during liver mobilisation) causes gas embolism. The severity is determined by:</p>
+  <ul style="margin: 0.5rem 0 1rem 1.5rem; line-height:1.9; color:#2a2a2a;">
+    <li><strong>Volume:</strong> Lethal venous air embolism threshold for air is ~3–5 ml/kg; CO₂ is far safer due to rapid dissolution.</li>
+    <li><strong>Rate:</strong> Slow infusion allows pulmonary absorption; rapid bolus overwhelms absorption, causing "gas lock" in the right ventricle — outflow obstruction → cardiovascular collapse.</li>
+    <li><strong>Solubility:</strong> CO₂ (Bunsen 0.83) dissolves ~60× faster than air in blood, explaining the relative safety of CO₂ vs air embolism.</li>
+  </ul>
+
+  <div class="warn-box">
+    <div class="box-label">Recognition & Management — Gas Embolism</div>
+    <p><strong>Signs:</strong> Sudden hypotension, mill-wheel murmur on precordial auscultation, ETCO₂ initially rises then falls catastrophically, SpO₂ drops.</p>
+    <p><strong>Treatment:</strong> Immediately desufflate. Durant's maneuver — left lateral decubitus position (moves gas bubble away from RV outflow). 100% O₂. CVP aspiration of gas. CPR if required.</p>
+  </div>
+
+  <h3>Trocar Injuries — Force and Vector Analysis</h3>
+  <p>Visceral or vascular injuries during trocar insertion result from excessive insertion force combined with inadequate abdominal wall counter-tension, or loss of control as the trocar "plunges" through the fascia. The physics:</p>
+  <p>Insertion force must overcome fascial tensile strength. Once the fascia yields, the trocar accelerates rapidly (Newton's 2nd law — net force now acts with no resisting tissue). Bladed trocars are particularly prone to plunging because the yield is abrupt. Dilating trocars have a more gradual force-distance curve, giving more control. Visual entry trocars (with a 0° scope inside) allow the surgeon to see each tissue layer yielding — providing real-time force feedback correlated to anatomical progress.</p>
+
+  <h3>Thermal Injuries Beyond the Visual Field</h3>
+  <p>As discussed in Chapter 5, capacitive coupling and direct insulation failure can cause electrosurgical burns to bowel that are anatomically remote from the activated electrode and outside the camera's field of view. These injuries often present 3–7 days post-operatively as delayed peritonitis — long after discharge — with a high mortality if recognition is delayed.</p>
+
+  <div class="key-points">
+    <div class="kp-label">Complication Prevention — Physics Principles</div>
+    <ul>
+      <li>Gas embolism: never insufflate before confirming Veress needle position (saline drop test, aspiration, low opening pressure <10 mmHg, flow compliance test).</li>
+      <li>Trocar injury: counter-pressure with non-dominant hand; controlled insertion; avoid excessive force; visual entry systems for high-risk abdomen.</li>
+      <li>Electrosurgical injury: inspect insulation before each case; use AEM; avoid hybrid trocars; minimise current activation time.</li>
+      <li>IVC injury: never insert the Veress needle in the midline below the umbilicus in a thin patient — the aortic bifurcation is only 2–4 cm deep.</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ═══════════════════════════════════ CHAPTER 9 -->
+<section class="chapter" id="ch9">
+  <div class="chapter-header">
+    <div class="chapter-number">Chapter 09</div>
+    <h2>Advanced Platforms: Robotics, NOTES & Single-Port</h2>
+    <p class="intro">Each advanced platform extends the physics of conventional laparoscopy in a specific direction — more degrees of freedom, smaller access, or eliminating abdominal wall trauma entirely.</p>
+  </div>
+
+  <h3>Robotic Surgery — Engineering Principles</h3>
+  <p>The da Vinci system (Intuitive Surgical) and its competitors (Hugo, Versius, Senhance) all operate on the same master-slave telemanipulation principle. The surgeon's console movements are:</p>
+  <ul style="margin: 0.5rem 0 1rem 1.5rem; line-height:1.9; color:#2a2a2a;">
+    <li><strong>Scaled:</strong> 3:1 to 5:1 motion scaling reduces tremor and allows micro-precise dissection.</li>
+    <li><strong>Filtered:</strong> High-frequency tremor (8–12 Hz) is electronically attenuated below the threshold of tissue damage.</li>
+    <li><strong>Translated:</strong> 7-DoF input is mapped to 7-DoF instrument output via real-time servo control at >1 kHz update rate.</li>
+  </ul>
+
+  <div class="physics-box">
+    <div class="box-label">Physics — Haptic Feedback Loss in Robotics</div>
+    <h4>Force Transmission in Telemanipulation</h4>
+    <p>Current robotic platforms transmit <strong>no haptic feedback</strong> to the surgeon. The mechanical forces at the instrument tip are absorbed by the robot's actuators and are not relayed back to the console. Surgeons must rely entirely on visual cues (tissue deformation, blanching) to estimate tissue tension — the same visual substitution used in conventional laparoscopy, but without even the attenuated tactile feedback of rigid instruments. Force-feedback (haptic) robotics remains an active area of research; experimental systems achieve <5N force feedback fidelity.</p>
+  </div>
+
+  <div class="fig-grid">
+    <div class="fig">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/DaVinci_robot_surgical_system_at_Leiden_University_Medical_Center.jpg/1280px-DaVinci_robot_surgical_system_at_Leiden_University_Medical_Center.jpg" alt="Da Vinci robot in OR" onerror="this.src='https://images.unsplash.com/photo-1576671081837-49000212a370?w=800&q=80'">
+      <div class="fig-caption"><strong>Fig 9.1</strong> — da Vinci Xi system patient-side cart with four arms. Each arm is independently docked to a trocar and carries an EndoWrist instrument or camera. The surgeon console may be in the same room or, theoretically, geographically remote (telesurgery).</div>
+    </div>
+    <div class="fig">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Single_port_laparoscopy.jpg/800px-Single_port_laparoscopy.jpg" alt="Single port laparoscopy SILS" onerror="this.src='https://images.unsplash.com/photo-1559757175-5700dde675bc?w=800&q=80'">
+      <div class="fig-caption"><strong>Fig 9.2</strong> — Single-incision laparoscopic surgery (SILS) port in the umbilicus. Multiple instruments enter through a single multiport device, creating an extreme version of the fulcrum effect where all instruments share the same entry point.</div>
+    </div>
+  </div>
+
+  <h3>NOTES — Natural Orifice Transluminal Endoscopic Surgery</h3>
+  <p>NOTES (transvaginal, transgastric, transrectal) eliminates abdominal wall incisions entirely — the ultimate minimisation of access trauma. The physics challenges are significant:</p>
+  <ul style="margin: 0.5rem 0 1rem 1.5rem; line-height:1.9; color:#2a2a2a;">
+    <li>Flexible endoscopes have very limited force transmission and instrument stiffness — making dissection difficult.</li>
+    <li>The loss of rigid leverage (no trocar fulcrum) means all tissue manipulation must be performed by instrument end-effectors without lever advantage.</li>
+    <li>Spatial orientation is fundamentally different — the endoscope approaches from below or behind, inverting the anatomical perspective.</li>
+    <li>Closure of the visceral access site (gastrotomy, colotomy) is technically challenging and currently limits widespread adoption.</li>
+  </ul>
+
+  <h3>The Future: Physics Horizons</h3>
+  <p>Several emerging technologies will reshape laparoscopy over the next decade, each representing a new application of physics:</p>
+  <ul style="margin: 0.5rem 0 1rem 1.5rem; line-height:1.9; color:#2a2a2a;">
+    <li><strong>Fluorescence imaging (ICG/NIR):</strong> Indocyanine green absorbs at 805 nm and emits at 835 nm — near-infrared fluorescence invisible to the naked eye but detectable with a modified camera, allowing real-time visualisation of bile ducts, ureters, and lymphatics.</li>
+    <li><strong>Augmented reality overlay:</strong> CT/MRI vascular anatomy projected onto the laparoscopic image using registration algorithms — physics of image fusion.</li>
+    <li><strong>Flexible robotics / continuum robots:</strong> Snake-like robots that navigate through natural orifices using cable-driven or pneumatic actuation — applied fluid mechanics and compliant mechanism design.</li>
+    <li><strong>AI-guided decision support:</strong> Real-time recognition of critical view of safety (CVS) in cholecystectomy using semantic segmentation neural networks — pattern recognition as applied information physics.</li>
+  </ul>
+
+  <div class="key-points">
+    <div class="kp-label">Chapter 9 Summary</div>
+    <ul>
+      <li>Robotics extends DoF and filters tremor but sacrifices haptic feedback — visual substitution is the surgeon's only tactile sense.</li>
+      <li>SILS amplifies the fulcrum effect; ergonomic challenge is significant without articulating instruments.</li>
+      <li>NOTES eliminates the abdominal wall access but introduces profound instrument stiffness and orientation challenges.</li>
+      <li>ICG fluorescence — the most clinically impactful near-term technology — is pure applied optics (NIR excitation/emission).</li>
+    </ul>
+  </div>
+
+  <hr class="divider" style="margin-top:4rem;">
+
+  <div style="text-align:center; padding: 2rem 0 1rem; color: var(--muted); font-size:0.82rem;">
+    <p style="margin-bottom:0.3rem;"><strong style="color:var(--ink);">Laparoscopic Surgery: A Physics-First Textbook</strong></p>
+    <p>Institute of General Surgery · MMC / RGGGH · 2026 Edition</p>
+    <p style="margin-top:0.8rem; font-size:0.74rem;">All images sourced from Wikimedia Commons or Unsplash (CC/open licence). For educational use only.</p>
+  </div>
+
+</section>
+
+</div><!-- /content -->
+</main>
+
+<script>
+  // Active sidebar link highlighting on scroll
+  const chapters = document.querySelectorAll('.chapter');
+  const navLinks = document.querySelectorAll('#sidebar nav a');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(link => link.classList.remove('active'));
+        const id = entry.target.id;
+        const active = document.querySelector(`#sidebar nav a[href="#${id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -60% 0px' });
+
+  chapters.forEach(ch => observer.observe(ch));
+</script>
+
+</body>
+</html>
